@@ -1,0 +1,12 @@
+const rfr = require('rfr');
+const express = require('express');
+const router = express.Router();
+const ProjectController = require('../controllers/projectController');
+const controller = new ProjectController();
+const middleware = rfr('src/helpers/jwt');
+router.post('/',() => middleware, controller.post);
+router.put('/:id',() => middleware, controller.put);
+router.get('/',() => middleware, controller.get);
+router.get('/:id',() => middleware, controller.one);
+router.delete('/:id',() => middleware, controller.delete);
+module.exports = router;

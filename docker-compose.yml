@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  site:
+    image: node:lts
+    working_dir: /var/www/site
+    command: bash -c 'yarn && yarn run dev'
+    volumes:
+      - ./site:/var/www/site
+    ports:
+      - "80:80"
+    networks:
+      - bolltech
+  api:
+    image: node:lts
+    working_dir: /var/www/api
+    command: bash -c 'yarn && node app.js'
+    volumes:
+      - ./api:/var/www/api
+      - ./api/node_modules:/var/www/api/node_modules
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    networks:
+      - bolltech
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: bolltech
+      MONGO_INITDB_USERNAME: bruno
+      MONGO_INITDB_PASSWORD: 123456
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./api/tmp:/data/db
+      - ./api/tmp/mongoinit.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+    networks:
+      - bolltech
+networks:
+  bolltech:
+    driver: bridge
