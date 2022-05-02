@@ -7,6 +7,14 @@ class APIError extends Error {
         this.status = status
         this.message = message
     }
+
+    get() {
+        return {
+            name: this.name,
+            status: this.status,
+            message: this.message
+        }
+    }
 }
 
-global.APIError = APIError
+module.exports = APIError

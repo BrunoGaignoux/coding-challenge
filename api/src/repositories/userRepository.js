@@ -4,7 +4,10 @@ const modelName = 'user'
 const projects = rfr('src/repositories/projectRepository').schema
 
 const structure = {
-    username: {
+    name: {
+        type: String,
+    },
+    email: {
         type: String,
         required: true,
         unique: true

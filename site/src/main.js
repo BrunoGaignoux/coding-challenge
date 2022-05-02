@@ -1,18 +1,19 @@
 import Vue from 'vue'
-import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
-import Notifications from 'vt-notifications'
-import './index.css'
-import VueTheMask from 'vue-the-mask'
 import App from './App.vue'
+import VueTheMask from 'vue-the-mask'
 import router from './router'
-
-Vue.use(VueCompositionAPI)
+import store from './store'
+import axios from "./service/axios";
+import moment from 'moment'
+import './assets/base.css'
+Vue.prototype.$http = axios;
+Vue.prototype.$moment = moment;
 Vue.use(VueTheMask)
-Vue.use(Notifications)
 
-const app = createApp({
+Vue.config.productionTip = false
+
+new Vue({
   router,
-  render: () => h(App)
-})
-
-app.mount('#app')
+  store,
+  render: h => h(App),
+}).$mount('#app')

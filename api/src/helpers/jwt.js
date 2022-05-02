@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { APP_SECRET } = process.env
+const rfr = require('rfr');
+const APIError = rfr('boot/api_error');
 
 const getTokenFromRequest = (req) => {
   const authorization = req.header('authorization')

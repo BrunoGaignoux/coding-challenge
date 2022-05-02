@@ -1,12 +1,12 @@
 <template>
-  <div class="login">
-    <Input
+  <div class="register">
+    <BaseInput
         v-model="name"
         name="name"
         placeholder="Seu nome"
         required
     />
-    <Input
+    <BaseInput
         v-model="email"
         type="email"
         name="email"
@@ -14,7 +14,7 @@
         required
     />
     <div class="password">
-      <Input
+      <BaseInput
           v-model="password"
           :type="`${showPassword ? 'text' : 'password'}`"
           name="password"
@@ -37,20 +37,20 @@
       </span>
     </div>
     <div class="actions">
-      <Button label="Cadastrar" :disabled="!available" />
+      <BaseButton label="Create" :disabled="!available" @click="createNewUser" />
     </div>
   </div>
 </template>
 
 <script>
-import Input from './Input.vue';
-import Button from './Button.vue';
+import BaseInput from './Input.vue';
+import BaseButton from './Button.vue';
 
 export default {
-  name: 'Register',
+  name: 'RegisterForm',
   components: {
-    Input,
-    Button
+    BaseInput,
+    BaseButton
   },
   computed: {
     available() {
@@ -64,27 +64,42 @@ export default {
       password: '',
       showPassword: false
     }
+  },
+  methods: {
+    async createNewUser() {
+      try {
+        await this.$store.dispatch('registerUser', {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        })
+        await this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password
+        })
+        this.name = ''
+        this.email = ''
+        this.password = ''
+        this.$emit('registered')
+      } catch (e) {
+        console.error(e)
+      }
+    }
   }
 }
 </script>
 
-<style scoped lang="css">
-.login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  padding: 2rem 0;
+<style scoped lang="postcss">
+.register {
+  @apply flex flex-col justify-center py-4;
 }
 .password {
-  position: relative;
-  align-items: center;
+  @apply relative items-center;
 }
 .icon {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  margin: 0 1rem;
-  top: 12px;
+  @apply cursor-pointer absolute right-0 mx-2 top-3;
+}
+.actions {
+  @apply flex justify-center align-middle mt-2;
 }
 </style>

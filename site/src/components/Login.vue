@@ -4,7 +4,7 @@
         v-model="email"
         type="email"
         name="email"
-        placeholder="Seu email"
+        placeholder="Your email"
         required
     />
     <div class="password">
@@ -12,7 +12,7 @@
           v-model="password"
           :type="`${showPassword ? 'text' : 'password'}`"
           name="password"
-          placeholder="Sua senha"
+          placeholder="Your password"
           required
       />
       <span
@@ -31,7 +31,7 @@
       </span>
     </div>
     <div class="actions">
-      <Button label="Entrar" :disabled="!available" />
+      <Button label="Login" :disabled="!available" @click="login" />
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ import Input from './Input.vue';
 import Button from './Button.vue';
 
 export default {
-  name: 'Login',
+  name: 'LoginFrom',
   components: {
     Input,
     Button
@@ -57,33 +57,36 @@ export default {
       password: '',
       showPassword: false
     }
+  },
+  methods: {
+    async login() {
+      try {
+        await this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password
+        })
+        this.email = ''
+        this.password = ''
+        await this.$router.push({ name: 'home' })
+      } catch (e) {
+        console.error(e)
+      }
+    }
   }
 }
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  padding: 2rem 0;
+  @apply flex flex-col justify-center py-4;
 }
 .password {
-  position: relative;
-  align-items: center;
+  @apply relative items-center;
 }
 .icon {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  margin: 0 1rem;
-  top: 12px;
+  @apply cursor-pointer absolute right-0 mx-2 top-3;
 }
 .actions {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-top: 1rem;
+  @apply flex justify-center align-middle mt-2;
 }
 </style>

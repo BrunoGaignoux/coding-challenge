@@ -45,8 +45,6 @@ app.use((_req, res, next) => {
 })
 app.options('*', cors())
 
-app.use(rfr);
-
 const userRoute = require('./src/routes/user');
 const authRoute = require('./src/routes/auth');
 const projectRoute = require('./src/routes/project');

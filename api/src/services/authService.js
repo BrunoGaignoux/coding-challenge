@@ -1,6 +1,7 @@
 const rfr = require('rfr');
 const Repository = rfr('src/repositories/userRepository').model
 const jwtHelper = rfr('src/helpers/jwt')
+const bcrypt = require('bcrypt')
 
 module.exports = {
     login(req, res) {
@@ -8,21 +9,17 @@ module.exports = {
         Repository.findOne(query)
             .select('+password')
             .exec((err, user) => {
-                if (err) throw err
+                if (err) console.error(err)
 
                 if (!user) {
                     return res.status(404).json({error: 'user_not_found'})
                 }
 
-                user.verifyPassword(req.body.password, (err, valid) => {
-                    if (err) throw err
+                if (!bcrypt.compare(user.password, req.body.password)) {
+                    return res.status(422).json({error: 'wrong_credentials'})
+                }
 
-                    if (!valid) {
-                        return res.status(422).json({error: 'wrong_credentials'})
-                    } else {
-                        return res.status(200).json({token: jwtHelper.generateToken(user), user})
-                    }
-                })
+                return res.status(200).json({token: jwtHelper.generateToken(user), user})
             })
     },
     me(req, res) {

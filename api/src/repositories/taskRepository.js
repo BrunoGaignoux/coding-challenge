@@ -3,13 +3,21 @@ const modelName = 'task'
 
 const structure = {
     name: {
-        type: Number,
+        type: String,
         required: true
     },
-    status: {
+    to: {
         type: String,
         required: false,
-        default: 'todo'
+    },
+    from: {
+        type: String,
+        required: false,
+    },
+    done: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 }
 

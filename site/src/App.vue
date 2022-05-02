@@ -1,37 +1,43 @@
-<script setup>
-import BaseNotification from '@/components/Notification.vue'
+<script>
+export default {
+  computed: {
+    user() {
+      return this.$store.state.auth.user
+    }
+  },
+  methods: {
+    async exit() {
+      await this.$store.dispatch('auth/logout')
+      await this.$router.push({ name: 'login' })
+    }
+  }
+}
 </script>
-
 <template>
   <div id="app">
     <header>
       <div class="wrapper">
-        <BaseNotification />
+        <div class="font-medium text-left p-2">
+          Bolltech TODO list
+        </div>
+        <div v-if="user" class="menu">
+          {{ user.name }}
+          <span class="menu__dropdown"></span>
+          <div class="menu__content">
+            <div @click="exit">
+              <p>Sair</p>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
-    <div class="container">
+    <div :class="`container ${$route.name}`">
       <router-view />
     </div>
   </div>
 </template>
 
-<style lang="css">
-@import '@/assets/base.css';
-
-#app {
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
+<style lang="postcss">
 a,
 .green {
   text-decoration: none;
@@ -45,71 +51,75 @@ a,
   }
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+body {
+  @apply flex bg-blue-100 text-base;
+
+  font-family: Roboto, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+#app {
+  @apply relative font-normal w-full flex justify-center;
+
+  margin: 0 auto;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.container {
+  @apply absolute p-4 w-full flex justify-center align-middle flex-col max-w-7xl top-20;
+
+  &.login {
+    top: 20rem;
+  }
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
+header {
+  @apply z-50 max-h-full w-full p-5 flex place-items-center bg-white fixed top-0 shadow-lg;
 
-nav a:first-of-type {
-  border: 0;
-}
+  line-height: 1.5;
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    background-color: #d7e1ea;
-    font-family: Roboto, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
+  & .wrapper {
+    @apply flex items-center justify-between flex-wrap w-full h-full;
 
-  #app {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 0 2rem;
-  }
+    & .menu {
+      @apply cursor-pointer font-medium text-right p-2 flex justify-between gap-3;
 
-  header {
-    width: 100%;
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+      &__content {
+        @apply hidden absolute bg-blue-100 text-xs w-20 mt-1.5 shadow-lg;
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+        z-index: 0;
+        transform: translate(-3rem);
+        padding: 5px 2px;
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+        div {
+          @apply w-full p-3 flex justify-between;
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+          &:hover {
+            @apply text-gray-500 font-black;
+          }
+        }
+      }
 
-    padding: 1rem 0;
-    margin-top: 1rem;
+      &__dropdown::after {
+        @apply relative inline-block align-middle text-right w-2 h-2 right-1 top-0;
+
+        content: '';
+        border: solid #3f3f46;
+        border-width: 0 2px 2px 0;
+        padding: 3px;
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+      }
+
+      &:hover .menu__content {
+        @apply grid top-6;
+        left: 75%;
+      }
+
+      &:hover .menu__dropdown::after {
+        top: -2px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+    }
   }
 }
 </style>

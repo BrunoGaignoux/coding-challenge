@@ -1,9 +1,12 @@
-<script setup lang="ts">
-import TheWelcome from '@/components/TheWelcome.vue'
+<script>
+export default {
+  name: 'HomeView',
+  components: {
+    ProjectList: () => import('@/components/Project.vue')
+  }
+}
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <ProjectList />
 </template>

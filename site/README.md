@@ -1,42 +1,24 @@
 # site
 
-This template should help get you started developing with Vue 2 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+## Project setup
+```
+yarn install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+### Compiles and hot-reloads for development
+```
+yarn serve
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
+### Compiles and minifies for production
+```
+yarn build
 ```
 
-### Run Unit Tests with [Cypress Component Testing](https://docs.cypress.io/guides/component-testing/introduction)
-
-```sh
-npm run test:unit # or `npm run test:unit:ci` for headless testing
+### Lints and fixes files
+```
+yarn lint
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run build
-npm run test:e2e # or `npm run test:e2e:ci` for headless testing
-```
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

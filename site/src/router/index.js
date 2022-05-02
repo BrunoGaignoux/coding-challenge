@@ -3,41 +3,42 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('../views/Home.vue'),
+    meta: {
+      public: false
+    }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/projects',
+    name: 'projects',
+    component: () => import('../views/Home.vue'),
+    meta: {
+      public: false
+    }
+  },
+  {
+    path: '/tasks',
+    name: 'tasks',
+    component: () => import('../views/Home.vue'),
+    meta: {
+      public: false
+    }
+  },
+]
+
 const router = new VueRouter({
   mode: 'history',
-  base: import.meta.env.BASE_URL,
-  scrollBehavior: () => ({ x: 0, y: 0 }),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/Home.vue'),
-      meta: {
-        public: false
-      }
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/Login.vue')
-    },
-    {
-      path: '/projects',
-      name: 'projects',
-      component: () => import('../views/Home.vue'),
-      meta: {
-        public: false
-      }
-    },
-    {
-      path: '/tasks',
-      name: 'tasks',
-      component: () => import('../views/Home.vue'),
-      meta: {
-        public: false
-      }
-    },
-  ]
+  base: process.env.BASE_URL,
+  routes
 })
 
 router.beforeEach((to, from, next) => {

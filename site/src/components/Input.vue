@@ -1,6 +1,20 @@
 <template>
   <div class="floating-input">
+    <the-mask
+      v-if="mask"
+      :id="name"
+      :mask="mask"
+      :type="type"
+      :name="name"
+      :value="value"
+      :placeholder="placeholder"
+      class="input"
+      :disabled="disabled"
+      @input="onInput"
+      @change="onChange"
+    />
     <input
+      v-else
       :id="name"
       :type="type"
       :name="name"
@@ -20,6 +34,7 @@
 
 <script>
 export default {
+  name: 'BaseInput',
   props: {
     name: {
       type: String,
@@ -60,6 +75,11 @@ export default {
           'date'
         ].includes(value)
       }
+    },
+    mask: {
+      type: [String, Array],
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -82,52 +102,38 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="postcss" scoped>
 .floating-input {
-  position: relative;
-  margin-bottom: 1rem;
-}
-.floating-input input::placeholder {
-  color: transparent;
-}
-.floating-input .input {
-  height: 3rem;
-  width: 100%;
-  border-radius: 0.375rem;
-  border: 1px solid rgb(229 231 235 / var(--tw-border-opacity));
-  --tw-border-opacity: 1;
-  padding: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.floating-input input:focus,
-.floating-input input:not(:placeholder-shown) {
-  padding-top: 2rem;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-border-opacity: 1;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity));
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 rgb(229 231 235 / var(--tw-border-opacity));
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-.floating-input input:focus + label,
-.floating-input input:not(:placeholder-shown) + label {
-  opacity: 0.75;
-  --tw-scale-x: .75;
-  --tw-scale-y: .75;
-}
-.floating-input .label {
-  pointer-events: none;
-  position: absolute;
-  left: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  height: 100%;
-  transition: all .3s ease-out;
-  -webkit-transition: all .3s ease-out;
-  -moz-transition: all .3s ease-out;
+  @apply mb-4 relative;
+
+  & input::placeholder {
+    color: transparent;
+  }
+
+  & .input {
+    @apply text-sm border border-gray-200 focus:outline-none rounded-md focus:border-gray-500 focus:shadow-sm w-full p-3 h-12;
+    &--error {
+      @apply border-red-500 focus:border-red-500 focus:ring-0;
+    }
+    &:disabled {
+      @apply bg-gray-300 cursor-not-allowed text-gray-400;
+    }
+  }
+
+  & input:focus,
+  input:not(:placeholder-shown) {
+    @apply pt-8;
+  }
+
+  & input:focus~label,
+  input:not(:placeholder-shown)~label {
+    @apply opacity-75 scale-75 -translate-y-3 translate-x-1;
+  }
+
+  & .label {
+    @apply absolute text-gray-400 text-sm left-0 px-3 py-5 h-full pointer-events-none transform origin-left transition-all duration-100 ease-in-out;
+
+    bottom: 6px;
+  }
 }
 </style>

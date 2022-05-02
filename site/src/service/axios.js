@@ -1,12 +1,11 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: 'http://localhost:3000/api/',
   timeout: 90000
 })
 
-export default ({ store, router, Vue }) => {
-  axiosInstance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     config => {
       const token = localStorage.getItem('token')
       if (token) config.headers.Authorization = `Bearer ${token}`
@@ -16,12 +15,14 @@ export default ({ store, router, Vue }) => {
     error => {
       Promise.reject(error)
     }
-  )
+)
 
+export default ({ store, router, Vue }) => {
   axiosInstance.interceptors.response.use(r => r, async error => {
     const { response } = error
 
     if (!response) {
+      console.error(error)
       throw error
     }
 
@@ -32,6 +33,7 @@ export default ({ store, router, Vue }) => {
       router.push({ name: 'login' })
     }
 
+    console.error(error)
     throw error
   })
 
